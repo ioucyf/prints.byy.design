@@ -5,7 +5,7 @@
   <title>Prints by Y</title>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#000000">
   <style>
     @page { size: A4; margin: 0; }
     body {
@@ -43,60 +43,78 @@
       color: #888;
     }
     input[type="file"] { display: none; }
-    button {
-      margin-top: 1cm;
-      padding: 0.5em 1em;
+    button.print {
+      background-color: #007bff;
+      color: white;
+      font-family: Arial, sans-serif;
+      border: none;
+      padding: 0.6em 1.2em;
       font-size: 1em;
+      border-radius: 0.3em;
       cursor: pointer;
     }
-    .donate {
-      font-size: 0.9em;
-      margin-top: 2cm;
-      color: #666;
+    button.reset {
+      background: none;
+      border: none;
+      color: black;
+      text-decoration: underline;
+      font-family: Arial, sans-serif;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 0.5em;
     }
-    .print-brand {
-      display: none;
+    .footer-print, .footer-donate {
       position: fixed;
       bottom: 1cm;
       width: 100%;
       text-align: center;
       font-size: 9pt;
+    }
+    .footer-print {
+      display: none;
       color: #444;
     }
+    .footer-donate {
+      color: #666;
+    }
     @media print {
-      body {
-        width: 21cm;
-        height: 29.7cm;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+      .footer-donate {
+        display: none;
       }
-      .upload, button, .donate { display: none; }
-      .card { border: none; page-break-inside: avoid; }
-      .print-brand { display: block; }
+      .footer-print {
+        display: block;
+      }
     }
   </style>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(function(reg) {
-        console.log("Service Worker registered", reg);
-      });
+      navigator.serviceWorker.register('/sw.js');
     }
-
     if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
       launchQueue.setConsumer(launchParams => {
         if (!launchParams.files.length) return;
         for (const fileHandle of launchParams.files) {
           fileHandle.getFile().then(file => {
             const url = URL.createObjectURL(file);
-            const img = document.getElementById('frontCard');
+            const choice = confirm("Use shared image for FRONT card? Press Cancel for BACK.");
+            const img = document.getElementById(choice ? 'frontCard' : 'backCard');
             img.src = url;
             img.style.display = 'block';
             img.previousElementSibling?.remove();
           });
+        }
+      });
+    }
+    function resetImages() {
+      ['frontCard', 'backCard'].forEach(id => {
+        const img = document.getElementById(id);
+        img.src = '';
+        img.style.display = 'none';
+        if (!img.previousElementSibling) {
+          const p = document.createElement('p');
+          p.className = 'placeholder';
+          p.textContent = id.includes('front') ? 'Tap to upload front' : 'Tap to upload back';
+          img.parentNode.insertBefore(p, img);
         }
       });
     }
@@ -115,9 +133,10 @@
       <input type="file" id="backInput" accept="image/*">
     </div>
   </div>
-  <button onclick="window.print()">Print</button>
-  <p class="donate">If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee ☕</a>.</p>
-  <p class="print-brand"><small>prints.byy.design</small></p>
+  <button class="print" onclick="window.print()">Print</button>
+  <button class="reset" onclick="resetImages()">Reset</button>
+  <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
+  <p class="footer-print"><small>prints.byy.design</small></p>
   <script>
     const loadImage = (inputId, imgId) => {
       const input = document.getElementById(inputId);
