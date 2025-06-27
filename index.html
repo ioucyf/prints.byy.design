@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#000000">
   <style>
     @page { size: A4; margin: 0; }
+
     body {
       font-family: 'Courier Prime', 'Courier New', Courier, monospace;
       text-align: center;
@@ -18,12 +19,14 @@
       align-items: center;
       justify-content: flex-start;
     }
+
     .card-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1cm;
     }
+
     .card {
       width: 8.6cm;
       height: 5.4cm;
@@ -36,16 +39,19 @@
       position: relative;
       cursor: pointer;
     }
+
     .card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: none;
     }
+
     .card .placeholder {
       font-size: 0.9em;
       color: #888;
     }
+
     input[type="file"] { display: none; }
 
     .button-group {
@@ -84,23 +90,35 @@
       width: 100%;
       text-align: center;
       font-size: 9pt;
-      position: fixed;
-      bottom: 1cm;
     }
 
     .footer-print {
       display: none;
       color: #444;
+      position: fixed;
+      bottom: 1cm;
+      z-index: 10;
     }
 
     .footer-donate {
       color: #666;
+      position: fixed;
+      bottom: 1cm;
     }
 
     @media print {
-      .button-group, .footer-donate {
+      body {
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+      }
+
+      .button-group,
+      .footer-donate {
         display: none;
       }
+
       .footer-print {
         display: block;
       }
