@@ -20,6 +20,8 @@
     }
 
     .page {
+  max-width: 100%;
+  padding: 2rem 1rem;
       width: 210mm;
       height: 297mm;
       margin: 0 auto;
@@ -117,7 +119,36 @@
     }
 
     @media print {
-      body {
+  body {
+    all: initial;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    page-break-inside: avoid;
+  }
+
+  .button-print,
+  .footer-donate {
+    display: none !important;
+  }
+
+  .footer-print {
+    display: block !important;
+    position: absolute;
+    bottom: 1cm;
+    width: 100%;
+    text-align: center;
+    font-size: 9pt;
+  }
+}
         all: initial;
       }
 
@@ -147,7 +178,14 @@
       </div>
     </div>
 
-    <div class="button-group">
+    
+<div class="button-reset">
+  <button class="reset" onclick="resetImages()">Reset</button>
+</div>
+
+<div class="button-print">
+  <button class="print" onclick="window.print()">Print</button>
+</div>
       <button class="print" onclick="window.print()">Print</button>
       <button class="reset" onclick="resetImages()">Reset</button>
     </div>
@@ -209,3 +247,28 @@
   </script>
 </body>
 </html>
+
+
+<style>
+.button-print {
+  position: fixed;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.button-print button {
+  width: 8.6cm;
+  font-size: 1em;
+  padding: 0.6em 1.2em;
+  border-radius: 0.3em;
+  font-family: Arial, sans-serif;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+</style>
