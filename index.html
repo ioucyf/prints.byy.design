@@ -3,48 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Prints by Y</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
   <style>
     @page {
       size: A4;
       margin: 0;
     }
 
-    body {
-      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      font-family: 'Courier Prime', monospace;
       background: white;
     }
 
-    .page {
-      max-width: 100%;
-      padding: 2rem 1rem;
+    body {
       display: flex;
       flex-direction: column;
+    }
+
+    .page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
     }
 
     .card-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1cm;
+      gap: 2rem;
+      max-width: 100%;
     }
 
     .card {
-      width: 8.6cm;
-      height: 5.4cm;
+      width: 86mm;
+      height: 54mm;
       border: 1px dashed #aaa;
-      border-radius: 0.3cm;
-      overflow: hidden;
+      border-radius: 5mm;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       position: relative;
-      cursor: pointer;
     }
 
     .card img {
@@ -54,71 +61,70 @@
       display: none;
     }
 
-    .card .placeholder {
+    .placeholder {
       font-size: 0.9em;
-      color: #888;
+      color: #777;
+      text-align: center;
+      padding: 1em;
     }
 
-    input[type="file"] { display: none; }
+    input[type="file"] {
+      display: none;
+    }
 
     .button-group {
       display: flex;
       flex-direction: column;
-      gap: 3px;
-      margin-top: 1cm;
-      width: 8.6cm;
+      gap: 1rem;
+      margin-top: 3rem;
+      width: 86mm;
+      max-width: 100%;
     }
 
     .button-group button {
-      width: 100%;
+      font-family: Arial, sans-serif;
       font-size: 1em;
       padding: 0.6em 1.2em;
       border-radius: 0.3em;
-      font-family: Arial, sans-serif;
+      cursor: pointer;
     }
 
-    button.print {
-      background-color: #007bff;
+    .button-print {
+      background: #007bff;
       color: white;
       border: none;
-      cursor: pointer;
     }
 
-    button.reset {
-      background: none;
+    .button-reset {
+      background: #333;
+      color: white;
       border: none;
-      color: black;
-      text-decoration: underline;
-      cursor: pointer;
     }
 
     .footer-donate,
     .footer-print {
-      width: 100%;
       text-align: center;
       font-size: 9pt;
-      margin-top: 1cm;
+      margin: 2rem 1rem 1rem;
     }
 
     .footer-print {
       display: none;
-      color: #444;
     }
 
     @media print {
-      body {
-        all: initial;
-        font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+      html, body {
+        height: 297mm;
+        width: 210mm;
+        margin: 0;
+        padding: 0;
       }
 
       .page {
-        width: 210mm;
-        height: 297mm;
-        margin: 0 auto;
+        height: 100%;
+        width: 100%;
         padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        justify-content: center;
       }
 
       .button-group,
@@ -137,24 +143,24 @@
 <body>
   <div class="page">
     <div class="card-container">
-      <div class="card" onclick="frontInput.click()">
+      <label class="card" for="frontInput">
         <p class="placeholder">Tap to upload front</p>
-        <img id="frontCard" alt="Front Card">
+        <img id="frontCard" alt="Front side">
         <input type="file" id="frontInput" accept="image/*">
-      </div>
-      <div class="card" onclick="backInput.click()">
+      </label>
+      <label class="card" for="backInput">
         <p class="placeholder">Tap to upload back</p>
-        <img id="backCard" alt="Back Card">
+        <img id="backCard" alt="Back side">
         <input type="file" id="backInput" accept="image/*">
-      </div>
+      </label>
     </div>
 
     <div class="button-group">
-      <button class="print" onclick="window.print()">Print</button>
-      <button class="reset" onclick="resetImages()">Reset</button>
+      <button class="button-print" onclick="window.print()">Print</button>
+      <button class="button-reset" onclick="resetImages()">Reset</button>
     </div>
 
-    <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
+    <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a>.</small></p>
     <p class="footer-print"><small>prints.byy.design</small></p>
   </div>
 
@@ -162,18 +168,17 @@
     const loadImage = (inputId, imgId) => {
       const input = document.getElementById(inputId);
       const img = document.getElementById(imgId);
+      const placeholder = img.previousElementSibling;
       input.addEventListener('change', () => {
         const file = input.files[0];
         if (file) {
           const url = URL.createObjectURL(file);
           img.src = url;
           img.style.display = 'block';
-          img.previousElementSibling?.remove();
+          if (placeholder) placeholder.remove();
         }
       });
     };
-    loadImage('frontInput', 'frontCard');
-    loadImage('backInput', 'backCard');
 
     function resetImages() {
       ['frontCard', 'backCard'].forEach(id => {
@@ -189,25 +194,8 @@
       });
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-
-    if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
-      launchQueue.setConsumer(launchParams => {
-        if (!launchParams.files.length) return;
-        for (const fileHandle of launchParams.files) {
-          fileHandle.getFile().then(file => {
-            const url = URL.createObjectURL(file);
-            const choice = confirm("Use shared image for FRONT card? Press Cancel for BACK.");
-            const img = document.getElementById(choice ? 'frontCard' : 'backCard');
-            img.src = url;
-            img.style.display = 'block';
-            img.previousElementSibling?.remove();
-          });
-        }
-      });
-    }
+    loadImage('frontInput', 'frontCard');
+    loadImage('backInput', 'backCard');
   </script>
 </body>
 </html>
