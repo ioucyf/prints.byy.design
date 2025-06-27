@@ -20,17 +20,11 @@
     }
 
     .page {
-  max-width: 100%;
-  padding: 2rem 1rem;
-      width: 210mm;
-      height: 297mm;
-      margin: 0 auto;
+      max-width: 100%;
+      padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      position: relative;
-      page-break-inside: avoid;
     }
 
     .card-container {
@@ -73,7 +67,6 @@
       gap: 3px;
       margin-top: 1cm;
       width: 8.6cm;
-      align-items: center;
     }
 
     .button-group button {
@@ -104,52 +97,28 @@
       width: 100%;
       text-align: center;
       font-size: 9pt;
+      margin-top: 1cm;
     }
 
     .footer-print {
       display: none;
       color: #444;
-      position: absolute;
-      bottom: 1cm;
-    }
-
-    .footer-donate {
-      color: #666;
-      margin-top: 1cm;
     }
 
     @media print {
-  body {
-    all: initial;
-  }
-
-  .page {
-    width: 210mm;
-    height: 297mm;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    page-break-inside: avoid;
-  }
-
-  .button-print,
-  .footer-donate {
-    display: none !important;
-  }
-
-  .footer-print {
-    display: block !important;
-    position: absolute;
-    bottom: 1cm;
-    width: 100%;
-    text-align: center;
-    font-size: 9pt;
-  }
-}
+      body {
         all: initial;
+        font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .button-group,
@@ -159,6 +128,8 @@
 
       .footer-print {
         display: block !important;
+        margin-top: auto;
+        padding-bottom: 1cm;
       }
     }
   </style>
@@ -178,14 +149,7 @@
       </div>
     </div>
 
-    
-<div class="button-reset">
-  <button class="reset" onclick="resetImages()">Reset</button>
-</div>
-
-<div class="button-print">
-  <button class="print" onclick="window.print()">Print</button>
-</div>
+    <div class="button-group">
       <button class="print" onclick="window.print()">Print</button>
       <button class="reset" onclick="resetImages()">Reset</button>
     </div>
@@ -247,28 +211,3 @@
   </script>
 </body>
 </html>
-
-
-<style>
-.button-print {
-  position: fixed;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 10;
-}
-
-.button-print button {
-  width: 8.6cm;
-  font-size: 1em;
-  padding: 0.6em 1.2em;
-  border-radius: 0.3em;
-  font-family: Arial, sans-serif;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-</style>
