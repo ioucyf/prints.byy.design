@@ -13,6 +13,10 @@
       text-align: center;
       padding: 2cm;
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
     .card-container {
       display: flex;
@@ -43,42 +47,58 @@
       color: #888;
     }
     input[type="file"] { display: none; }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 1cm;
+      width: 8.6cm;
+      align-items: center;
+    }
+
+    .button-group button {
+      width: 100%;
+      font-size: 1em;
+      padding: 0.6em 1.2em;
+      border-radius: 0.3em;
+      font-family: Arial, sans-serif;
+    }
+
     button.print {
       background-color: #007bff;
       color: white;
-      font-family: Arial, sans-serif;
       border: none;
-      padding: 0.6em 1.2em;
-      font-size: 1em;
-      border-radius: 0.3em;
       cursor: pointer;
     }
+
     button.reset {
       background: none;
       border: none;
       color: black;
       text-decoration: underline;
-      font-family: Arial, sans-serif;
-      font-size: 1em;
       cursor: pointer;
-      margin-top: 0.5em;
     }
+
     .footer-print, .footer-donate {
-      position: fixed;
-      bottom: 1cm;
       width: 100%;
       text-align: center;
       font-size: 9pt;
+      position: fixed;
+      bottom: 1cm;
     }
+
     .footer-print {
       display: none;
       color: #444;
     }
+
     .footer-donate {
       color: #666;
     }
+
     @media print {
-      .footer-donate {
+      .button-group, .footer-donate {
         display: none;
       }
       .footer-print {
@@ -133,10 +153,15 @@
       <input type="file" id="backInput" accept="image/*">
     </div>
   </div>
-  <button class="print" onclick="window.print()">Print</button>
-  <button class="reset" onclick="resetImages()">Reset</button>
+
+  <div class="button-group">
+    <button class="print" onclick="window.print()">Print</button>
+    <button class="reset" onclick="resetImages()">Reset</button>
+  </div>
+
   <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
   <p class="footer-print"><small>prints.byy.design</small></p>
+
   <script>
     const loadImage = (inputId, imgId) => {
       const input = document.getElementById(inputId);

@@ -1,3 +1,1 @@
-# prints.byy.design
-
-A personal mini print studio PWA.
+Mini print studio: https://prints.byy.design
