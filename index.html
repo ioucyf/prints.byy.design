@@ -2,31 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Print Card Front & Back</title>
+  <title>Prints by Y</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
   <style>
-    @page {
-      size: A4;
-      margin: 0;
-    }
-
+    @page { size: A4; margin: 0; }
     body {
-      font-family: sans-serif;
+      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
       text-align: center;
       padding: 2cm;
       margin: 0;
     }
-
-    .upload {
-      margin-bottom: 1cm;
-    }
-
     .card-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1cm;
     }
-
     .card {
       width: 8.6cm;
       height: 5.4cm;
@@ -36,35 +29,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      cursor: pointer;
     }
-
     .card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: none;
     }
-
+    .card .placeholder {
+      font-size: 0.9em;
+      color: #888;
+    }
+    input[type="file"] { display: none; }
     button {
       margin-top: 1cm;
       padding: 0.5em 1em;
       font-size: 1em;
       cursor: pointer;
     }
-
     .donate {
       font-size: 0.9em;
       margin-top: 2cm;
       color: #666;
     }
-
     .print-brand {
       display: none;
-      font-size: 10pt;
+      position: fixed;
+      bottom: 1cm;
+      width: 100%;
       text-align: center;
-      margin-top: 2cm;
+      font-size: 9pt;
       color: #444;
     }
-
     @media print {
       body {
         width: 21cm;
@@ -76,43 +74,50 @@
         align-items: center;
         justify-content: center;
       }
-
-      .upload, button, .donate {
-        display: none;
-      }
-
-      .card {
-        border: none;
-        page-break-inside: avoid;
-      }
-
-      .print-brand {
-        display: block;
-      }
+      .upload, button, .donate { display: none; }
+      .card { border: none; page-break-inside: avoid; }
+      .print-brand { display: block; }
     }
   </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(function(reg) {
+        console.log("Service Worker registered", reg);
+      });
+    }
+
+    if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+      launchQueue.setConsumer(launchParams => {
+        if (!launchParams.files.length) return;
+        for (const fileHandle of launchParams.files) {
+          fileHandle.getFile().then(file => {
+            const url = URL.createObjectURL(file);
+            const img = document.getElementById('frontCard');
+            img.src = url;
+            img.style.display = 'block';
+            img.previousElementSibling?.remove();
+          });
+        }
+      });
+    }
+  </script>
 </head>
 <body>
-  <div class="upload">
-    <label>
-      Front Image: <input type="file" accept="image/*" id="frontInput">
-    </label><br><br>
-    <label>
-      Back Image: <input type="file" accept="image/*" id="backInput">
-    </label><br><br>
-    <button onclick="window.print()">Print</button>
-  </div>
-
   <div class="card-container">
-    <div class="card"><img id="frontCard" src="" alt="Front Card"></div>
-    <div class="card"><img id="backCard" src="" alt="Back Card"></div>
+    <div class="card" onclick="frontInput.click()">
+      <p class="placeholder">Tap to upload front</p>
+      <img id="frontCard" alt="Front Card">
+      <input type="file" id="frontInput" accept="image/*">
+    </div>
+    <div class="card" onclick="backInput.click()">
+      <p class="placeholder">Tap to upload back</p>
+      <img id="backCard" alt="Back Card">
+      <input type="file" id="backInput" accept="image/*">
+    </div>
   </div>
-
-  <p class="donate">
-    If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee ☕</a>.
-  </p>
-  <p class="print-brand">prints.byy.design</p>
-
+  <button onclick="window.print()">Print</button>
+  <p class="donate">If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee ☕</a>.</p>
+  <p class="print-brand"><small>prints.byy.design</small></p>
   <script>
     const loadImage = (inputId, imgId) => {
       const input = document.getElementById(inputId);
@@ -120,11 +125,13 @@
       input.addEventListener('change', () => {
         const file = input.files[0];
         if (file) {
-          img.src = URL.createObjectURL(file);
+          const url = URL.createObjectURL(file);
+          img.src = url;
+          img.style.display = 'block';
+          img.previousElementSibling?.remove();
         }
       });
     };
-
     loadImage('frontInput', 'frontCard');
     loadImage('backInput', 'backCard');
   </script>
