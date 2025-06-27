@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prints by Y</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <style>
+    @page { size: A4; margin: 0; }
+
+    body {
+      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+      text-align: center;
+      padding: 2cm;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1cm;
+    }
+
+    .card {
+      width: 8.6cm;
+      height: 5.4cm;
+      border: 1px dashed #aaa;
+      border-radius: 0.3cm;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .card .placeholder {
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    input[type="file"] { display: none; }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 1cm;
+      width: 8.6cm;
+      align-items: center;
+    }
+
+    .button-group button {
+      width: 100%;
+      font-size: 1em;
+      padding: 0.6em 1.2em;
+      border-radius: 0.3em;
+      font-family: Arial, sans-serif;
+    }
+
+    button.print {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.reset {
+      background: none;
+      border: none;
+      color: black;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .footer-print, .footer-donate {
+      width: 100%;
+      text-align: center;
+      font-size: 9pt;
+    }
+
+    .footer-print {
+      display: none;
+      color: #444;
+      position: fixed;
+      bottom: 1cm;
+      z-index: 10;
+    }
+
+    .footer-donate {
+      color: #666;
+      position: fixed;
+      bottom: 1cm;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+        display: block;
+        padding: 0;
+        margin: 0;
+      }
+
+      .card-container {
+        margin-top: calc((100vh - 2 * 5.4cm - 1cm) / 2);
+      }
+        /* Removed 100vh to prevent print page break */
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+      }
+
+      .button-group,
+      .footer-donate {
+        display: none;
+      }
+
+      .footer-print {
+        display: block;
+      }
+    }
+  </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+    if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+      launchQueue.setConsumer(launchParams => {
+        if (!launchParams.files.length) return;
+        for (const fileHandle of launchParams.files) {
+          fileHandle.getFile().then(file => {
+            const url = URL.createObjectURL(file);
+            const choice = confirm("Use shared image for FRONT card? Press Cancel for BACK.");
+            const img = document.getElementById(choice ? 'frontCard' : 'backCard');
+            img.src = url;
+            img.style.display = 'block';
+            img.previousElementSibling?.remove();
+          });
+        }
+      });
+    }
+    function resetImages() {
+      ['frontCard', 'backCard'].forEach(id => {
+        const img = document.getElementById(id);
+        img.src = '';
+        img.style.display = 'none';
+        if (!img.previousElementSibling) {
+          const p = document.createElement('p');
+          p.className = 'placeholder';
+          p.textContent = id.includes('front') ? 'Tap to upload front' : 'Tap to upload back';
+          img.parentNode.insertBefore(p, img);
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="page">
+  <div class="card-container">
+    <div class="card" onclick="frontInput.click()">
+      <p class="placeholder">Tap to upload front</p>
+      <img id="frontCard" alt="Front Card">
+      <input type="file" id="frontInput" accept="image/*">
+    </div>
+    <div class="card" onclick="backInput.click()">
+      <p class="placeholder">Tap to upload back</p>
+      <img id="backCard" alt="Back Card">
+      <input type="file" id="backInput" accept="image/*">
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button class="print" onclick="window.print()">Print</button>
+    <button class="reset" onclick="resetImages()">Reset</button>
+  </div>
+
+  <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
+  <p class="footer-print"><small>prints.byy.design</small></p>
+
+  <script>
+    const loadImage = (inputId, imgId) => {
+      const input = document.getElementById(inputId);
+      const img = document.getElementById(imgId);
+      input.addEventListener('change', () => {
+        const file = input.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          img.src = url;
+          img.style.display = 'block';
+          img.previousElementSibling?.remove();
+        }
+      });
+    };
+    loadImage('frontInput', 'frontCard');
+    loadImage('backInput', 'backCard');
+  </script>
+  </div>
+</body>
+</html>
