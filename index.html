@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Print Card Front & Back</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2cm;
+      margin: 0;
+    }
+
+    .upload {
+      margin-bottom: 1cm;
+    }
+
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1cm;
+    }
+
+    .card {
+      width: 8.6cm;
+      height: 5.4cm;
+      border: 1px dashed #aaa;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    button {
+      margin-top: 1cm;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .donate {
+      font-size: 0.9em;
+      margin-top: 2cm;
+      color: #666;
+    }
+
+    .print-brand {
+      display: none;
+      font-size: 10pt;
+      text-align: center;
+      margin-top: 2cm;
+      color: #444;
+    }
+
+    @media print {
+      body {
+        width: 21cm;
+        height: 29.7cm;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .upload, button, .donate {
+        display: none;
+      }
+
+      .card {
+        border: none;
+        page-break-inside: avoid;
+      }
+
+      .print-brand {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="upload">
+    <label>
+      Front Image: <input type="file" accept="image/*" id="frontInput">
+    </label><br><br>
+    <label>
+      Back Image: <input type="file" accept="image/*" id="backInput">
+    </label><br><br>
+    <button onclick="window.print()">Print</button>
+  </div>
+
+  <div class="card-container">
+    <div class="card" id="frontCard"></div>
+    <div class="card" id="backCard"></div>
+  </div>
+
+  <p class="donate">
+    If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee ☕</a>.
+  </p>
+  <p class="print-brand">prints.byy.design</p>
+
+  <script>
+    const loadImage = (input, target) => {
+      input.addEventListener('change', () => {
+        const file = input.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          target.style.backgroundImage = `url(${url})`;
+        }
+      });
+    };
+
+    loadImage(document.getElementById('frontInput'), document.getElementById('frontCard'));
+    loadImage(document.getElementById('backInput'), document.getElementById('backCard'));
+  </script>
+</body>
+</html>
