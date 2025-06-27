@@ -7,17 +7,28 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <style>
-    @page { size: A4; margin: 0; }
+    @page {
+      size: A4;
+      margin: 0;
+    }
 
     body {
       font-family: 'Courier Prime', 'Courier New', Courier, monospace;
-      text-align: center;
-      padding: 2cm;
       margin: 0;
+      padding: 0;
+      background: white;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
+      position: relative;
+      page-break-inside: avoid;
     }
 
     .card-container {
@@ -86,7 +97,8 @@
       cursor: pointer;
     }
 
-    .footer-print, .footer-donate {
+    .footer-donate,
+    .footer-print {
       width: 100%;
       text-align: center;
       font-size: 9pt;
@@ -95,90 +107,54 @@
     .footer-print {
       display: none;
       color: #444;
-      position: fixed;
+      position: absolute;
       bottom: 1cm;
-      z-index: 10;
     }
 
     .footer-donate {
       color: #666;
-      position: fixed;
-      bottom: 1cm;
+      margin-top: 1cm;
     }
 
     @media print {
       body {
-        height: 100vh;
-        padding: 0;
-        margin: 0;
-        justify-content: center;
+        all: initial;
       }
 
       .button-group,
       .footer-donate {
-        display: none;
+        display: none !important;
       }
 
       .footer-print {
-        display: block;
+        display: block !important;
       }
     }
   </style>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-    if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
-      launchQueue.setConsumer(launchParams => {
-        if (!launchParams.files.length) return;
-        for (const fileHandle of launchParams.files) {
-          fileHandle.getFile().then(file => {
-            const url = URL.createObjectURL(file);
-            const choice = confirm("Use shared image for FRONT card? Press Cancel for BACK.");
-            const img = document.getElementById(choice ? 'frontCard' : 'backCard');
-            img.src = url;
-            img.style.display = 'block';
-            img.previousElementSibling?.remove();
-          });
-        }
-      });
-    }
-    function resetImages() {
-      ['frontCard', 'backCard'].forEach(id => {
-        const img = document.getElementById(id);
-        img.src = '';
-        img.style.display = 'none';
-        if (!img.previousElementSibling) {
-          const p = document.createElement('p');
-          p.className = 'placeholder';
-          p.textContent = id.includes('front') ? 'Tap to upload front' : 'Tap to upload back';
-          img.parentNode.insertBefore(p, img);
-        }
-      });
-    }
-  </script>
 </head>
 <body>
-  <div class="card-container">
-    <div class="card" onclick="frontInput.click()">
-      <p class="placeholder">Tap to upload front</p>
-      <img id="frontCard" alt="Front Card">
-      <input type="file" id="frontInput" accept="image/*">
+  <div class="page">
+    <div class="card-container">
+      <div class="card" onclick="frontInput.click()">
+        <p class="placeholder">Tap to upload front</p>
+        <img id="frontCard" alt="Front Card">
+        <input type="file" id="frontInput" accept="image/*">
+      </div>
+      <div class="card" onclick="backInput.click()">
+        <p class="placeholder">Tap to upload back</p>
+        <img id="backCard" alt="Back Card">
+        <input type="file" id="backInput" accept="image/*">
+      </div>
     </div>
-    <div class="card" onclick="backInput.click()">
-      <p class="placeholder">Tap to upload back</p>
-      <img id="backCard" alt="Back Card">
-      <input type="file" id="backInput" accept="image/*">
+
+    <div class="button-group">
+      <button class="print" onclick="window.print()">Print</button>
+      <button class="reset" onclick="resetImages()">Reset</button>
     </div>
-  </div>
 
-  <div class="button-group">
-    <button class="print" onclick="window.print()">Print</button>
-    <button class="reset" onclick="resetImages()">Reset</button>
+    <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
+    <p class="footer-print"><small>prints.byy.design</small></p>
   </div>
-
-  <p class="footer-donate"><small>If this helped, consider <a href="https://coff.ee/ioucyf" target="_blank">buying me a coffee</a></small></p>
-  <p class="footer-print"><small>prints.byy.design</small></p>
 
   <script>
     const loadImage = (inputId, imgId) => {
@@ -196,6 +172,40 @@
     };
     loadImage('frontInput', 'frontCard');
     loadImage('backInput', 'backCard');
+
+    function resetImages() {
+      ['frontCard', 'backCard'].forEach(id => {
+        const img = document.getElementById(id);
+        img.src = '';
+        img.style.display = 'none';
+        if (!img.previousElementSibling) {
+          const p = document.createElement('p');
+          p.className = 'placeholder';
+          p.textContent = id.includes('front') ? 'Tap to upload front' : 'Tap to upload back';
+          img.parentNode.insertBefore(p, img);
+        }
+      });
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+
+    if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+      launchQueue.setConsumer(launchParams => {
+        if (!launchParams.files.length) return;
+        for (const fileHandle of launchParams.files) {
+          fileHandle.getFile().then(file => {
+            const url = URL.createObjectURL(file);
+            const choice = confirm("Use shared image for FRONT card? Press Cancel for BACK.");
+            const img = document.getElementById(choice ? 'frontCard' : 'backCard');
+            img.src = url;
+            img.style.display = 'block';
+            img.previousElementSibling?.remove();
+          });
+        }
+      });
+    }
   </script>
 </body>
 </html>
