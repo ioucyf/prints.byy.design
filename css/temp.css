@@ -1,0 +1,143 @@
+@page {
+  size: A4;
+  margin: 0;
+  max-height: 297mm;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Courier Prime', monospace;
+  background: white;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 100%;
+}
+
+.card {
+  width: 86mm;
+  height: 54mm;
+  border: 1px dashed #aaa;
+  border-radius: 5mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.placeholder {
+  font-size: 0.9em;
+  color: #777;
+  text-align: center;
+  padding: 1em;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 3rem;
+  width: 86mm;
+  max-width: 100%;
+}
+
+.button-group button {
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+  padding: 0.6em 1.2em;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+
+.button-print {
+  background: #007bff;
+  color: white;
+  border: none;
+}
+
+.button-reset {
+  background: #333;
+  color: white;
+  border: none;
+}
+
+.footer-donate,
+.footer-print {
+  text-align: center;
+  font-size: 9pt;
+  margin: 2rem 1rem 1rem;
+}
+
+.footer-print {
+  display: none;
+}
+
+@media print {
+
+  html,
+  body {
+    height: 297mm;
+    max-height: 297mm;
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .button-group,
+  .footer-donate {
+    display: none !important;
+  }
+
+  .footer-print {
+    display: block !important;
+    position: absolute;
+    bottom: 1cm;
+    width: 100%;
+    text-align: center;
+    font-size: 9pt;
+  }
+}

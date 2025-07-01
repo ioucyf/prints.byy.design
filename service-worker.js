@@ -24,7 +24,7 @@ self.addEventListener("install", event => {
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
   if (/version\.json$/gi.test(url.pathname)) {
-    return event.respondWith(fetch(event.requets));
+    return event.respondWith(fetch(event.request));
   }
 
   event.respondWith(
