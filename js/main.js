@@ -1,4 +1,4 @@
-import serviceWorker from './sw.js';
+import sw from './sw.js';
 
 // const version = document.getElementById('version');
 // const url = "https://api.github.com/repos/ioucyf/prints.byy.design/commits/main";
