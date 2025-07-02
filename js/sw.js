@@ -6,10 +6,10 @@ if ('serviceWorker' in navigator) {
 
     navigator.serviceWorker.addEventListener('message', (event) => {
       if (event.data === 'reload') {
-        updateButton.classList.add('update');
-        // alert('You’re already up to date.');
+        location.reload();
+        // updateButton.classList.add('update');
       } else if (event.data === 'no-update') {
-        // location.reload();
+        alert('You’re already up to date.');
       }
     });
 
