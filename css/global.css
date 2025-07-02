@@ -1,0 +1,41 @@
+/* this should contain global styles/variable */
+
+:root {
+  --primary-color: rgba(0, 115, 255, 0.85);
+  --primary-active-color: rgba(0, 79, 175, 0.85);
+  --secondary-color: rgba(243, 243, 243, 0.85);
+  --secondary-active-color: rgba(208, 208, 208, 0.85);
+  --disabled-color: rgba(65, 65, 65, 0.65);
+  --disabled-active-color: rgba(45, 45, 45, 0.85);
+  --danger-color: rgba(255, 0, 0, 0.85);
+  --danger-active-color: rgba(185, 0, 0, 0.85);
+  --warning-color: rgba(255, 200, 0, 0.85);
+  --success-color: rgba(0, 161, 0, 0.85);
+  --success-active-color: rgba(0, 100, 0, 0.85);
+  --neutral-gray: rgba(189, 189, 189, 0.85);
+  --overlay-color: rgba(0, 0, 0, 0.45);
+  --input-background-color: rgba(0, 0, 0, 0.65);
+  --input-background-color-active: rgba(0, 0, 0, 0.45);
+  /* --input-border-color: rgba(0, 0, 0, 0.45); */
+  --input-border-color: transparent;
+  --input-border-color-active: yellow;
+  --input-color: white;
+  --input-color-active: yellow;
+  --spinner-color: white;
+  --focus-color: rgba(255, 200, 0, 0.85);
+  --border-radius: 5px;
+  --background-color: #e0e0e0;
+  --header-height: 96px;
+  --footer-height: 96px;
+}
+/*
+html {
+  height: 100vh;
+  height: 100dvh !important;
+
+  width: 100vw;
+  width: 100dvw !important;
+} */
+
+@media (prefers-color-scheme: dark) {
+}
