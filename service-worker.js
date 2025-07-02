@@ -71,6 +71,12 @@ async function handleUpdate(event) {
   const currentSHA = currentCache?.replace('cache-', '');
 
   if (currentSHA !== latestSHA) {
+
+    // delete old cache
+    if (currentCache) {
+      await caches.delete(currentCache);
+    }
+
     const newCache = await caches.open(`cache-${latestSHA}`);
     await newCache.addAll(ASSETS);
 
