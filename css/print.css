@@ -90,7 +90,7 @@
 
   small.print:not(.ios) {
     display: block !important;
-    text-align: center;
+    text-align: left;
     font-size: 9pt;
     /* border: 1px solid magenta; */
     color: rgb(124, 124, 124);
