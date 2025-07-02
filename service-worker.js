@@ -6,8 +6,11 @@ const ASSETS = [
   '/css/reset.css',
   '/css/global.css',
   '/css/main.css',
-  '/css/temp.css',
+  '/css/print.css',
+  '/css/button.css',
   '/js/main.js',
+  '/js/sw.js',
+
   '/assets/icon-1024.png',
   '/manifest.json',
   // add all assets you want cached
