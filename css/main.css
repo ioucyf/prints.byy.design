@@ -132,6 +132,8 @@ footer {
   align-items: start;
   justify-content: center;
   padding: 10px 25px;
+
+  border: 1px solid magenta;
   /* align-self: center; */
   /* justify-self: center; */
 
