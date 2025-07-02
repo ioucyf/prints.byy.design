@@ -24,12 +24,18 @@
   --spinner-color: white;
   --focus-color: rgba(255, 200, 0, 0.85);
   --border-radius: 5px;
-  --background-color: #e6e7ee;
+  --background-color: #e0e0e0;
   --header-height: 96px;
   --footer-height: 96px;
-
-
 }
+/*
+html {
+  height: 100vh;
+  height: 100dvh !important;
+
+  width: 100vw;
+  width: 100dvw !important;
+} */
 
 @media (prefers-color-scheme: dark) {
 }

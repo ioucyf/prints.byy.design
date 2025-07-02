@@ -17,11 +17,15 @@
 </head>
 
 <body ontouchstart="">
-  <aside>
-    <pre id="version">latest commit SHA</pre>
-    <button id="update-button" class="primary threeD gradient">Update</button>
-  </aside>
-  <div class="page">
+  <header>
+    <nav>
+      <pre id="version">latest commit SHA</pre>
+      <button id="update-button" class="primary">Update</button>
+    </nav>
+  </header>
+  <main>
+
+
     <div class="card-container">
       <label class="card" for="frontInput">
         <p class="placeholder">Tap to upload front</p>
@@ -34,15 +38,18 @@
         <input type="file" id="backInput" accept="image/*">
       </label>
     </div>
-
     <div class="button-group">
-      <button class="button-print threeD primary gradient" onclick="window.print()">Print</button>
-      <button class="button-reset threeD secondary gradient" onclick="resetImages()">Reset</button>
+      <button id="button-print" class="primary">Print</button>
+      <button id="button-reset" class="transparent" onclick="resetImages()">Reset</button>
     </div>
 
-    <p class="footer-donate"><small>I like <a href="https://coff.ee/ioucyf" target="_blank">coffee</a>. 🥰</small></p>
-    <p class="footer-print"><small>prints.byy.design</small></p>
-  </div>
+
+  </main>
+  <footer>
+    <p><small class="donate">I like <a href="https://coff.ee/ioucyf" target="_blank">coffee</a>.
+        🥰</small></p>
+    <p><small class="print"><a href="https://prints.byy.design/">https://prints.byy.design/</a></small></p>
+  </footer>
 </body>
 
 </html>

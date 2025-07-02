@@ -1,22 +1,4 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // navigator.serviceWorker.register('service-worker.js');
-    navigator.serviceWorker.register('/service-worker.js');
-
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      if (event.data === 'reload') {
-        location.reload();
-      } else if (event.data === 'no-update') {
-        alert('You’re already up to date.');
-      }
-    });
-
-    document.getElementById('update-button').addEventListener('click', () => {
-      navigator.serviceWorker.controller?.postMessage('check-for-update');
-    });
-
-  });
-}
+// import serviceWorker from './sw.js';
 
 const version = document.getElementById('version');
 const url = "https://api.github.com/repos/ioucyf/prints.byy.design/commits/main";
@@ -57,6 +39,24 @@ function resetImages() {
     }
   });
 }
+
+function isIOS() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator?.userAgent) ||
+    (navigator?.platform === 'MacIntel' && navigator?.maxTouchPoints > 1)
+  );
+}
+
+if (isIOS()) {
+  const smallPrint = document.querySelector('small.print');
+  smallPrint.classList.add('ios');
+}
+
+const printButton = document.getElementById('button-print');
+printButton.addEventListener('click', () => { return window.print(); });
+
+const resetButton = document.getElementById('button-reset');
+resetButton.addEventListener('click', resetImages);
 
 loadImage('frontInput', 'frontCard');
 loadImage('backInput', 'backCard');

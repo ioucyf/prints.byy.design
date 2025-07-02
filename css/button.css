@@ -188,14 +188,14 @@ button {
   --button-lightness: 65%;
 }
 
-:focus:not(:active) {
+:focus-visible:not(:active) {
   --button-hue: var(--focus-hue, 45);
   --button-saturation: var(--focus-saturation, 100%);
   --button-lightness: var(--focus-lightness, 50%);
   outline: 2px solid var(--button-color);
   outline-offset: -3px;
 }
-.threeD:focus:not(:active) {
+.threeD:focus-visible:not(:active) {
   /* --button-lip-color: var(--button-color); */
   outline: 0 none;
   box-shadow: 0 3px 0 0 hsla(var(--button-hue), 100%, 50%, 0.797),
