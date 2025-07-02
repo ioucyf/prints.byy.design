@@ -20,4 +20,4 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-export { };
+export default { };
