@@ -1,15 +1,15 @@
-// import serviceWorker from './sw.js';
+import serviceWorker from './sw.js';
 
-const version = document.getElementById('version');
-const url = "https://api.github.com/repos/ioucyf/prints.byy.design/commits/main";
+// const version = document.getElementById('version');
+// const url = "https://api.github.com/repos/ioucyf/prints.byy.design/commits/main";
 
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    // console.log("Latest commit SHA:", data.sha);
-    version.textContent = data.sha;
-  })
-  .catch(error => console.error("Error fetching commit:", error));
+// fetch(url)
+//   .then(response => response.json())
+//   .then(data => {
+//     // console.log("Latest commit SHA:", data.sha);
+//     // version.textContent = data.sha;
+//   })
+//   .catch(error => console.error("Error fetching commit:", error));
 
 const loadImage = (inputId, imgId) => {
   const input = document.getElementById(inputId);

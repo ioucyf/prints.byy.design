@@ -206,8 +206,8 @@ button {
 }
 
 button svg {
-  height: var(--button-svg-size, 24px) !important;
-  width: var(--button-svg-size, 24px) !important;
+  height: var(--button-svg-size, 24px);
+  width: var(--button-svg-size, 24px);
 
   transform: translate3d(0, 0, 0);
 }
