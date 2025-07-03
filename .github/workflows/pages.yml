@@ -23,7 +23,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Inject Git SHA into sw.js
+      - name: Inject Git SHA into service-worker-build.js
         run: |
           SHA=$(git rev-parse --short HEAD)
           sed "s/__BUILD_SHA__/$SHA/g" js/sw.template.js > service-worker-build.js
