@@ -41,6 +41,11 @@ async function deleteOldCaches(event) {
   self.clients.claim();
 }
 
+async function deleteThenUpdate(event) {
+  await deleteOldCaches(event);
+  await cacheAllAssets(event);
+}
+
 
 async function handleUpdate(event) {
   const currentCache = await getCurrentCacheName();
@@ -79,14 +84,15 @@ async function handleUpdate(event) {
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    cacheAllAssets(event)
+    // cacheAllAssets(event)
+    deleteThenUpdate(event)
   );
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    deleteOldCaches(event)
-  );
+  // event.waitUntil(
+  //   deleteOldCaches(event)
+  // );
 });
 
 // self.addEventListener('fetch', event => {
