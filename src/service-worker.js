@@ -85,11 +85,11 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    // deleteOldCaches(event)
-    // deleteThenUpdate(event)
-    self.clients.claim()
-  );
+  // event.waitUntil(
+  // deleteOldCaches(event)
+  // deleteThenUpdate(event)
+  // );
+  self.clients.claim();
 });
 
 // self.addEventListener('fetch', event => {
