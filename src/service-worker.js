@@ -78,17 +78,27 @@ async function cacheFirst(event) {
   const cachedResponse = await cache.match(event.request);
   if (cachedResponse) {
     console.log('[SW] Serving from cache:', event.request.url);
-    return event.respondWith(cachedResponse);
+    return cachedResponse;
   }
 
   console.log('[SW] Fetching from network:', event.request.url);
-  const networkResponse = await fetch(event.request).catch(err => console.error(err));
+  const networkResponse = await fetch(event.request).then(response => {
+    console.log('[SW] Network response received:', response);
+    return response;
+  })
+    .catch(err => console.error(err));
+
   console.log('[SW] Network response:', networkResponse);
   if (networkResponse && networkResponse.ok) {
     await cache.put(event.request, networkResponse.clone());
     console.log('[SW] Cached new response:', event.request.url);
+  } else {
+    console.warn('[SW] Failed to fetch or cache:', event.request.url);
+    if (networkResponse) {
+      console.warn('[SW] Network response status:', networkResponse);
+    }
   }
-  return event.respondWith(networkResponse);
+  return networkResponse;
 }
 
 
@@ -119,7 +129,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // console.log('[SW] Fetch intercepted:', event.request.url);
 
-  event.waitUntil(cacheFirst(event));
+  return cacheFirst(event);
 });
 
 // ð Listen for 'update' request from page
