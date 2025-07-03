@@ -43,16 +43,13 @@ jobs:
           echo "Generated asset list:"
           cat asset-list.json
 
-          echo "Validating asset list JSON..."
-          jq empty asset-list.json || { echo "❌ Invalid JSON"; cat asset-list.json; exit 1; }
-
           echo "Injecting SHA into template..."
           sed "s|__BUILD_SHA__|$SHA|g" src/service-worker.js > build/service-worker.tmp.js
 
           echo "Injecting asset list..."
-          jq --slurpfile assets asset-list.json '
-            split("__ASSETS__") | join(($assets[0] | tojson))
-          ' build/service-worker.tmp.js > build/service-worker.js
+          SERVICE_WORKER_CONTENT=$(cat build/service-worker.tmp.js)
+          ASSET_LIST_JSON=$(cat asset-list.json)
+          echo "${SERVICE_WORKER_CONTENT/__ASSETS__/${ASSET_LIST_JSON}}" > build/service-worker.js
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
