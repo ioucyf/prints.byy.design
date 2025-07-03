@@ -101,7 +101,7 @@ async function cacheFirst(event) {
       console.warn('[SW] Network response status:', networkResponse);
     }
   }
-  return networkResponse;
+  return networkResponse || new Response(null, { status: 404, statusText: 'Not Found' });
 }
 
 
