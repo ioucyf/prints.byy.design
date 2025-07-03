@@ -16,22 +16,29 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: Inject Git SHA into service-worker-build.js
+      - name: Prepare build folder
+        run: |
+          mkdir -p build
+          cp -r src/* build/
+
+      - name: Inject Git SHA and ASSETS into service-worker
         run: |
           SHA=$(git rev-parse --short HEAD)
-          sed "s/__BUILD_SHA__/$SHA/g" js/sw.template.js > service-worker-build.js
+          ASSETS=$(find ./build -type f | sed 's|^./build||' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          sed -e "s/__BUILD_SHA__/$SHA/g" -e "s|__ASSETS__|$ASSETS|" src/sw.template.js > build/service-worker.js
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: '.'
+          path: './build'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
