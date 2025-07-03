@@ -12,7 +12,7 @@
   "protocol_handlers": [
     {
       "protocol": "prints+byy",
-      "url": "/%s"
+      "url": "/images?%s"
     }
   ],
   "icons": [
