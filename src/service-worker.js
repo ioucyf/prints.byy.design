@@ -117,7 +117,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   console.log('[SW] Fetch intercepted:', event.request.url);
 
- event.respondWith(event.waitUntil(cacheFirst(event)));
+  event.respondWith(cacheFirst(event));
 });
 
 // ð Listen for 'update' request from page
