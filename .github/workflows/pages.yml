@@ -31,21 +31,21 @@ jobs:
           cp -r src/* build/
 
       - name: Inject SHA and asset list into service worker
-  run: |
-    SHA=$(git rev-parse --short HEAD)
+        run: |
+          SHA=$(git rev-parse --short HEAD)
 
-    echo "Generating asset list..."
-    find build -type f ! -name service-worker.js \
-      | sed 's|^build||; s| |%20|g' \
-      | jq -R . | jq -s . > asset-list.json
+          echo "Generating asset list..."
+          find build -type f ! -name service-worker.js \
+            | sed 's|^build||; s| |%20|g' \
+            | jq -R . | jq -s . > asset-list.json
 
-    echo "Injecting SHA into template..."
-    sed "s|__BUILD_SHA__|$SHA|g" src/service-worker.js > build/service-worker.tmp.js
+          echo "Injecting SHA into template..."
+          sed "s|__BUILD_SHA__|$SHA|g" src/service-worker.js > build/service-worker.tmp.js
 
-    echo "Injecting asset list..."
-    jq --slurpfile assets asset-list.json '
-      split("__ASSETS__") | join(($assets[0] | tojson))
-    ' build/service-worker.tmp.js > build/service-worker.js
+          echo "Injecting asset list..."
+          jq --slurpfile assets asset-list.json '
+            split("__ASSETS__") | join(($assets[0] | tojson))
+          ' build/service-worker.tmp.js > build/service-worker.js
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
