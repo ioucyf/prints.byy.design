@@ -54,10 +54,8 @@ async function handleUpdate(event) {
 
   const keys = await caches.keys();
   for (const key of keys) {
-    if (key !== CACHE_NAME) {
-      await caches.delete(key);
-      console.log('[SW] Deleted old cache:', key);
-    }
+    await caches.delete(key);
+    console.log('[SW] Deleted old cache:', key);
   }
 
   const newCache = await caches.open(CACHE_NAME);
