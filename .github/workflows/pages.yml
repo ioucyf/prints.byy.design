@@ -55,7 +55,7 @@ jobs:
               src/service-worker.js > build/service-worker.js
 
       - name: Upload build artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
 
