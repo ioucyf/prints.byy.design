@@ -32,11 +32,11 @@ jobs:
 
       - name: Install build tools
         run: |
-          npm install -g terser postcss postcss-cli autoprefixer cssnano postcss-preset-env jq
+          npm install -g esbuild postcss postcss-cli autoprefixer cssnano postcss-preset-env jq
 
       - name: Minify JS files
         run: |
-          find build -type f -name '*.js' ! -name 'service-worker.js' -exec terser {} -o {} \;
+          find build -type f -name '*.js' ! -name 'service-worker.js' -exec esbuild {} --minify --outfile={} \;
 
       - name: Process CSS with PostCSS
         run: |
