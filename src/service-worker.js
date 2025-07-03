@@ -81,6 +81,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     // cacheAllAssets(event)
     // deleteThenUpdate(event)
+    handleUpdate(event)
   );
 });
 
