@@ -14,7 +14,9 @@ async function getCurrentCacheName() {
 
 async function cacheAllAssets(event) {
   const cache = await caches.open(CACHE_NAME);
-  await cache.addAll(ASSETS);
+  await cache.addAll(ASSETS.map(asset => {
+    return asset.replace(/^[/]/, '');
+  }));
   self.skipWaiting();
 }
 
@@ -77,7 +79,7 @@ async function handleUpdate(event) {
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    cacheAllAssetsIndividually(event)
+    cacheAllAssets(event)
   );
 });
 
