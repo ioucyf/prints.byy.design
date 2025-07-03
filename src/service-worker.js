@@ -86,7 +86,10 @@ async function cacheFirst(event) {
     console.log('[SW] Network response received:', response);
     return response;
   })
-    .catch(err => console.error(err));
+    .catch(err => {
+      console.error(err);
+      return null;
+    });
 
   console.log('[SW] Network response:', networkResponse);
   if (networkResponse && networkResponse.ok) {
