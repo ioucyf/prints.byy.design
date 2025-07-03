@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v3
 
       - name: Prepare build folder
         run: |
@@ -38,14 +38,21 @@ jobs:
             | sed 's/^build//; s/ /%20/g' \
             | jq -R . | jq -s .)
 
-          echo "$ASSET_LIST" > asset_list.json
-          ASSET_LIST_ESCAPED=$(cat asset_list.json | jq -Rs .)
-          sed -e "s|__BUILD_SHA__|$SHA|g" -e "s|__ASSETS__|$ASSET_LIST_ESCAPED|g" src/service-worker.js > build/service-worker.js
+          echo "Injecting into service worker..."
+          sed -e "s|__BUILD_SHA__|$SHA|g" -e "s|__ASSETS__|$ASSET_LIST|g" src/service-worker.js > build/service-worker.js
+
+      - name: List build files (debug)
+        run: |
+          echo "Verifying contents of ./build:"
+          find build
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
+
+      - name: Wait for artifact to register
+        run: sleep 5
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v3
