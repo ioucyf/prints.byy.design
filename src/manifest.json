@@ -11,7 +11,7 @@
   "description": "A micro print studio.",
   "protocol_handlers": [
     {
-      "protocol": "web+prints+byy",
+      "protocol": "web+pbyd",
       "url": "/images?%s"
     }
   ],
