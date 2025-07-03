@@ -102,19 +102,18 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   console.log('[SW] Fetch intercepted:', event.request.url);
 
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) {
-        console.log('[SW] ➜ Serving from cache:', event.request.url);
-        return cachedResponse;
-      }
+  caches.match(event.request).then(cachedResponse => {
+    if (cachedResponse) {
+      console.log('[SW] ➜ Serving from cache:', event.request.url);
+      return event.respondWith(cachedResponse);
+    }
 
-      console.log('[SW] ➜ Fetching from network:', event.request.url);
-      return fetch(event.request);
-    }).catch(err => {
-      console.error('[SW] Fetch failed:', err);
-    })
-  );
+    console.log('[SW] ➜ Fetching from network:', event.request.url);
+    return event.respondWith(fetch(event.request));
+  }).catch(err => {
+    console.error('[SW] Fetch failed:', err);
+  });
+
 });
 
 // ð Listen for 'update' request from page
