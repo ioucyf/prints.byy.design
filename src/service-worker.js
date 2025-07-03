@@ -1,5 +1,5 @@
-const CACHE_NAME = 'cache-__BUILD_SHA__';
-const ASSETS = __ASSETS__; // placeholder to be replaced with JSON array
+const CACHE_NAME = 'cache-$SHA';
+const ASSETS = $ASSET_LIST; // placeholder to be replaced with JSON array
 const OWNER = 'ioucyf'; // GitHub username or org
 const REPO = 'prints.byy.design';     // Your repo name
 const BRANCH = 'main';
