@@ -82,7 +82,8 @@ async function cacheFirst(event) {
   }
 
   console.log('[SW] Fetching from network:', event.request.url);
-  const networkResponse = await fetch(event.request).catch(err => console.error);
+  const networkResponse = await fetch(event.request).catch(err => console.error(err));
+  console.log('[SW] Network response:', networkResponse);
   if (networkResponse && networkResponse.ok) {
     await cache.put(event.request, networkResponse.clone());
     console.log('[SW] Cached new response:', event.request.url);
