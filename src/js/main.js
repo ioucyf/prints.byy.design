@@ -1,4 +1,4 @@
-import sw from './sw.installer.js';
+import './sw.installer.js';
 
 // const version = document.getElementById('version');
 // const url = "https://api.github.com/repos/ioucyf/prints.byy.design/commits/main";
