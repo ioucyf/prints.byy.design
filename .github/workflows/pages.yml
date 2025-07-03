@@ -20,15 +20,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        uses: actions/checkout@v4
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v4
         uses: actions/configure-pages@v4
 
       - name: Prepare build folder
         run: |
-          rm -rf build
           rm -rf build
           mkdir -p build
           cp -r src/* build/
@@ -38,18 +35,11 @@ jobs:
           SHA=$(git rev-parse --short HEAD)
 
           echo "Generating asset list..."
-
-          echo "Generating asset list..."
           ASSET_LIST=$(find build -type f \
-            | sed 's|^build||; s| |%20|g' \
-            | jq -R . | jq -s .)
             | sed 's|^build||; s| |%20|g' \
             | jq -R . | jq -s .)
 
           echo "Injecting into service worker..."
-          sed -e "s|__BUILD_SHA__|$SHA|g" \
-              -e "s|__ASSETS__|$ASSET_LIST|" \
-              src/service-worker.js > build/service-worker.js
           sed -e "s|__BUILD_SHA__|$SHA|g" \
               -e "s|__ASSETS__|$ASSET_LIST|" \
               src/service-worker.js > build/service-worker.js
