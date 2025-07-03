@@ -18,6 +18,21 @@ async function cacheAllAssets(event) {
   self.skipWaiting();
 }
 
+async function cacheAllAssetsIndividually(event) {
+  const cache = await caches.open(CACHE_NAME);
+  for (const asset of ASSETS) {
+    try {
+      await cache.add(asset);
+      console.log(`[SW] Cached: ${asset}`);
+    } catch (err) {
+      console.warn(`[SW] Failed to cache: ${asset}`, err);
+    }
+  }
+  self.skipWaiting();
+}
+
+
+
 async function deleteOldCaches(event) {
   const keys = await caches.keys();
   await Promise.all(keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null)));
@@ -62,7 +77,7 @@ async function handleUpdate(event) {
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    cacheAllAssets(event)
+    cacheAllAssetsIndividually(event)
   );
 });
 
