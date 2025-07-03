@@ -8,7 +8,7 @@ const BRANCH = 'main';
 
 async function getCurrentCacheName() {
   const keys = await caches.keys();
-  const cacheKey = keys.find(k => k.startsWith('cache-'));
+  const cacheKey = keys.find(k => k.startsWith(CACHE_NAME));
   return cacheKey || null;
 };
 
@@ -49,32 +49,27 @@ async function deleteThenUpdate(event) {
 
 async function handleUpdate(event) {
   const currentCache = await getCurrentCacheName();
-  const currentSHA = currentCache?.replace('cache-', '');
+  if (currentCache) return;
 
-  if (currentSHA !== '__BUILD_SHA__') {
 
-    if (currentCache) {
-      await caches.delete(currentCache);
-    }
-
-    const newCache = await caches.open(CACHE_NAME);
-    await newCache.addAll(ASSETS);
-
-    const keys = await caches.keys();
-    for (const key of keys) {
-      if (key !== CACHE_NAME) await caches.delete(key);
-    }
-
-    const clients = await self.clients.matchAll();
-    for (const client of clients) {
-      client.postMessage('reload');
-    }
-  } else {
-    const clients = await self.clients.matchAll();
-    for (const client of clients) {
-      client.postMessage('no-update');
+  const keys = await caches.keys();
+  for (const key of keys) {
+    if (key !== CACHE_NAME) {
+      await caches.delete(key);
+      console.log('[SW] Deleted old cache:', key);
     }
   }
+
+  const newCache = await caches.open(CACHE_NAME);
+  await newCache.addAll(ASSETS);
+  console.log('[SW] New cache created:', CACHE_NAME);
+
+
+  self.skipWaiting();
+  // const clients = await self.clients.matchAll();
+  // for (const client of clients) {
+  //   client.postMessage('reload');
+  // }
 }
 
 
@@ -83,16 +78,17 @@ async function handleUpdate(event) {
 // SERVICE WORKER EVENTS HANDLERS
 
 self.addEventListener('install', event => {
-  // event.waitUntil(
+  event.waitUntil(
     // cacheAllAssets(event)
     // deleteThenUpdate(event)
-  // );
+  );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
     // deleteOldCaches(event)
-    deleteThenUpdate(event)
+    // deleteThenUpdate(event)
+    self.clients.claim()
   );
 });
 
