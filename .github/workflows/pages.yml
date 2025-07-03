@@ -30,6 +30,18 @@ jobs:
           mkdir -p build
           cp -r src/* build/
 
+      - name: Install build tools
+        run: |
+          npm install -g terser postcss postcss-cli autoprefixer cssnano postcss-preset-env jq
+
+      - name: Minify JS files
+        run: |
+          find build -type f -name '*.js' ! -name 'service-worker.js' -exec terser {} -o {} \;
+
+      - name: Process CSS with PostCSS
+        run: |
+          find build -type f -name '*.css' -exec postcss {} --replace \;
+
       - name: Inject SHA and asset list into service worker
         run: |
           SHA=$(git rev-parse --short HEAD)
