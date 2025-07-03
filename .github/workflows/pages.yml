@@ -30,6 +30,7 @@ jobs:
           cp -r src/* build/
 
       - name: Inject SHA and asset list into service worker
+      - name: Inject SHA and asset list into service worker
         run: |
           SHA=$(git rev-parse --short HEAD)
 
