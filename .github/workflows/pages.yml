@@ -51,19 +51,6 @@ jobs:
           ASSET_LIST_JSON=$(cat asset-list.json)
           echo "${SERVICE_WORKER_CONTENT/__ASSETS__/${ASSET_LIST_JSON}}" > build/service-worker.js
 
-      - name: Install build tools
-        run: |
-          npm install -g esbuild postcss postcss-cli autoprefixer cssnano postcss-preset-env
-
-      - name: Minify JS files
-        run: |
-          find build -type f -name '*.js' ! -name 'service-worker.js' -exec esbuild {} --minify --outfile={} \;
-
-      - name: Process CSS with PostCSS
-        run: |
-          find build -type f -name '*.css' -exec postcss {} --replace \;
-
-
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
