@@ -9,6 +9,12 @@
   "background_color": "#000000",
   "theme_color": "#ffffff",
   "description": "A micro print studio.",
+  "protocol_handlers": [
+    {
+      "protocol": "prints+byy",
+      "url": "/%s"
+    }
+  ],
   "icons": [
     {
       "src": "assets/icon-1024.png",
