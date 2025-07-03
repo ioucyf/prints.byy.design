@@ -1,8 +1,8 @@
-const CACHE_NAME = 'cache-__BUILD_SHA__';
+const CACHE_NAME = `cache-${'__BUILD_SHA__'}`;
+const ASSETS = JSON.parse('__ASSETS__');
 const OWNER = 'ioucyf'; // GitHub username or org
 const REPO = 'prints.byy.design';     // Your repo name
 const BRANCH = 'main';
-const ASSETS = __ASSETS__; // This will be replaced during build;
 
 
 
