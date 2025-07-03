@@ -72,9 +72,27 @@ self.addEventListener('activate', event => {
   );
 });
 
+// self.addEventListener('fetch', event => {
+//   event.respondWith(
+//     caches.match(event.request).then(response => response || fetch(event.request))
+//   );
+// });
+
 self.addEventListener('fetch', event => {
+  console.log('[SW] Fetch intercepted:', event.request.url);
+
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.match(event.request).then(cachedResponse => {
+      if (cachedResponse) {
+        console.log('[SW] ➜ Serving from cache:', event.request.url);
+        return cachedResponse;
+      }
+
+      console.log('[SW] ➜ Fetching from network:', event.request.url);
+      return fetch(event.request);
+    }).catch(err => {
+      console.error('[SW] Fetch failed:', err);
+    })
   );
 });
 
