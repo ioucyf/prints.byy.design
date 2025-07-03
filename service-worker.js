@@ -9,7 +9,7 @@ const ASSETS = [
   '/css/print.css',
   '/css/button.css',
   '/js/main.js',
-  '/js/sw.js',
+  '/js/sw.installer.js',
 
   '/assets/icon-1024.png',
   '/manifest.json',
