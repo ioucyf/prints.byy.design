@@ -72,7 +72,22 @@ async function handleUpdate(event) {
   // }
 }
 
+async function cacheFirst(event) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(event.request);
+  if (cachedResponse) {
+    console.log('[SW] Serving from cache:', event.request.url);
+    return cachedResponse;
+  }
 
+  console.log('[SW] Fetching from network:', event.request.url);
+  const networkResponse = await fetch(event.request);
+  if (networkResponse && networkResponse.ok) {
+    await cache.put(event.request, networkResponse.clone());
+    console.log('[SW] Cached new response:', event.request.url);
+  }
+  return networkResponse;
+}
 
 
 // SERVICE WORKER EVENTS HANDLERS
@@ -102,18 +117,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   console.log('[SW] Fetch intercepted:', event.request.url);
 
-  caches.match(event.request).then(cachedResponse => {
-    if (cachedResponse) {
-      console.log('[SW] ➜ Serving from cache:', event.request.url);
-      return event.respondWith(cachedResponse);
-    }
-
-    console.log('[SW] ➜ Fetching from network:', event.request.url);
-    return event.respondWith(fetch(event.request));
-  }).catch(err => {
-    console.error('[SW] Fetch failed:', err);
-  });
-
+  event.waitUntil(event.respondWith(cacheFirst(event)));
 });
 
 // ð Listen for 'update' request from page
