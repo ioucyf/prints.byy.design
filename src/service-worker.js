@@ -83,10 +83,10 @@ async function handleUpdate(event) {
 // SERVICE WORKER EVENTS HANDLERS
 
 self.addEventListener('install', event => {
-  event.waitUntil(
+  // event.waitUntil(
     // cacheAllAssets(event)
     // deleteThenUpdate(event)
-  );
+  // );
 });
 
 self.addEventListener('activate', event => {
