@@ -85,14 +85,15 @@ async function handleUpdate(event) {
 self.addEventListener('install', event => {
   event.waitUntil(
     // cacheAllAssets(event)
-    deleteThenUpdate(event)
+    // deleteThenUpdate(event)
   );
 });
 
 self.addEventListener('activate', event => {
-  // event.waitUntil(
-  //   deleteOldCaches(event)
-  // );
+  event.waitUntil(
+    // deleteOldCaches(event)
+    deleteThenUpdate(event)
+  );
 });
 
 // self.addEventListener('fetch', event => {
