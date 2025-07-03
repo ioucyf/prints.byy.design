@@ -32,7 +32,7 @@ jobs:
 
       - name: Install build tools
         run: |
-          npm install -g esbuild postcss postcss-cli autoprefixer cssnano postcss-preset-env jq
+          npm install -g esbuild postcss postcss-cli autoprefixer cssnano postcss-preset-env
 
       - name: Minify JS files
         run: |
