@@ -32,17 +32,10 @@ jobs:
       - name: Inject SHA and asset list into service worker
         run: |
           SHA=$(git rev-parse --short HEAD)
-
           echo "Generating asset list..."
-          ASSET_LIST=$(find build -type f \
-            | sed 's/^build//; s/ /%20/g' \
-            | jq -R . | jq -cs .)
-
+          ASSET_LIST=$(find build -type f | sed 's/^build//; s/ /%20/g' | jq -R . | jq -s .)
           echo "Injecting into service worker..."
-          printf "%s\n" \
-            "const CACHE_NAME = 'cache-${SHA}';" \
-            "const ASSETS = ${ASSET_LIST};" \
-            "$(tail -n +3 src/service-worker.js)" > build/service-worker.js
+          sed -e "s|__BUILD_SHA__|$SHA|g" -e "s|__ASSETS__|$ASSET_LIST|" src/service-worker.js > build/service-worker.js
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
