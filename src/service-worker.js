@@ -74,6 +74,7 @@ async function handleUpdate(event) {
 
 async function cacheFirst(event) {
   const cache = await caches.open(CACHE_NAME);
+
   const cachedResponse = await cache.match(event.request);
   if (cachedResponse) {
     console.log('[SW] Serving from cache:', event.request.url);
@@ -115,7 +116,7 @@ self.addEventListener('activate', event => {
 // });
 
 self.addEventListener('fetch', event => {
-  console.log('[SW] Fetch intercepted:', event.request.url);
+  // console.log('[SW] Fetch intercepted:', event.request.url);
 
   event.respondWith(cacheFirst(event));
 });
