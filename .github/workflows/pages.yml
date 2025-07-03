@@ -36,23 +36,18 @@ jobs:
           echo "Generating asset list..."
           ASSET_LIST=$(find build -type f \
             | sed 's/^build//; s/ /%20/g' \
-            | jq -R . | jq -s .)
+            | jq -R . | jq -cs .)
 
           echo "Injecting into service worker..."
-          sed -e "s|__BUILD_SHA__|$SHA|g" -e "s|__ASSETS__|$ASSET_LIST|g" src/service-worker.js > build/service-worker.js
-
-      - name: List build files (debug)
-        run: |
-          echo "Verifying contents of ./build:"
-          find build
+          printf "%s\n" \
+            "const CACHE_NAME = 'cache-${SHA}';" \
+            "const ASSETS = ${ASSET_LIST};" \
+            "$(tail -n +3 src/service-worker.js)" > build/service-worker.js
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
-
-      - name: Wait for artifact to register
-        run: sleep 5
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v3
