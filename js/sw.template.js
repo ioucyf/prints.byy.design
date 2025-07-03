@@ -1,3 +1,4 @@
+const CACHE_NAME = 'cache-__BUILD_SHA__';
 const OWNER = 'ioucyf'; // GitHub username or org
 const REPO = 'prints.byy.design';     // Your repo name
 const BRANCH = 'main';
@@ -84,5 +85,3 @@ async function handleUpdate(event) {
     }
   }
 }
-
-const CACHE_NAME = 'cache-__BUILD_SHA__';
