@@ -137,7 +137,7 @@ footer {
   justify-content: center;
   padding: 10px 25px;
 
-  border-top: 1px solid #ccc;
+  border-top: 1px dotted rgb(188, 188, 188);
 
   width: 100%;
   max-width: 430px;
