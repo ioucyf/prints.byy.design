@@ -1,0 +1,44 @@
+import { writeFileSync, mkdirSync } from 'fs';
+import path from 'path';
+import favicons from 'favicons';
+
+const source = path.resolve('src/assets/icon-1024.png'); // your high-res image
+const outputDir = path.resolve('public/assets'); // or src/assets if you prefer
+
+const config = {
+  path: '/assets/',
+  dir: './src',
+  appName: 'Prints By Y',
+  appShortName: 'Prints',
+  appDescription: 'A micro print studio.',
+  developerName: 'byy.design',
+  background: '#000000',
+  theme_color: '#ffffff',
+  icons: {
+    favicons: true,
+    android: true,
+    appleIcon: true,
+    windows: true,
+    yandex: false
+  }
+};
+
+favicons(source, config)
+  .then(response => {
+    mkdirSync(outputDir, { recursive: true });
+
+    for (const image of response.images) {
+      writeFileSync(path.join(outputDir, image.name), image.contents);
+    }
+
+    for (const file of response.files) {
+      writeFileSync(path.join(outputDir, file.name), file.contents);
+    }
+
+    // You can manually inject response.html into your template if needed
+    console.log('[favicon] ✅ Icons generated successfully.');
+  })
+  .catch(err => {
+    console.error('[favicon] ❌ Failed to generate icons:', err.message);
+    process.exit(1);
+  });
