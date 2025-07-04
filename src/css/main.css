@@ -128,13 +128,21 @@ footer {
   grid-area: footer;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: 'footer-content';
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    'footer-content'
+    'footer-version';
 
   align-items: start;
   justify-content: center;
   padding: 10px 25px;
 
+  border-top: 1px solid #ccc;
+
+  width: 100%;
+  max-width: 430px;
+  align-self: center;
+  justify-self: center;
   /* border: 1px solid magenta; */
   /* align-self: center; */
   /* justify-self: center; */
@@ -152,6 +160,10 @@ footer {
     color: #333;
     text-align: center;
 
+    &:has(#webapp-version) {
+      grid-area: footer-version;
+      align-self: end;
+    }
     & small {
       display: block;
       color: #666;
@@ -179,6 +191,11 @@ footer {
             text-decoration: underline;
           }
         }
+      }
+      &:is(#webapp-version) {
+        display: block;
+        font-size: 9px;
+        color: #999;
       }
     }
   }

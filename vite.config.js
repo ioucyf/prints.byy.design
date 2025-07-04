@@ -35,6 +35,8 @@ export default defineConfig({
         const distDir = path.resolve(__dirname, 'dist');
         const swTemplatePath = path.resolve(__dirname, 'src/service-worker.js');
         const swOutputPath = path.resolve(distDir, 'service-worker.js');
+        const htmlTemplatePath = path.resolve(__dirname, 'src/index.html');
+        const htmlOutputPath = path.resolve(distDir, 'index.html');
 
         // Collect all asset paths
         const assetFiles = [];
@@ -54,8 +56,15 @@ export default defineConfig({
         swContent = swContent
           .replace(/__BUILD_SHA__/g, sha)
           .replace(/__ASSETS__/g, JSON.stringify(assetFiles, null, 2));
+
         fs.writeFileSync(swOutputPath, swContent);
         console.log(`[vite] ✅ Injected SHA (${sha}) and assets into service-worker.js`);
+
+        let htmlContent = fs.readFileSync(htmlOutputPath, 'utf8');
+        htmlContent = htmlContent
+          .replace(/__VERSION__/g, sha);
+        fs.writeFileSync(htmlOutputPath, htmlContent);
+        console.log(`[vite] ✅ Injected SHA (VERSION) (${sha}) into index.html`);
       }
     }
   ]
