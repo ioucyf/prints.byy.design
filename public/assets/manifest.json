@@ -11,6 +11,12 @@
   "start_url": "https://prints.byy.design/",
   "background_color": "#000000",
   "theme_color": "#ffffff",
+  "protocol_handlers": [
+    {
+      "protocol": "web+prints",
+      "url": "https: //prints.byy.design/?%s"
+    }
+  ],
   "icons": [
     {
       "src": "/assets/android-chrome-36x36.png",
