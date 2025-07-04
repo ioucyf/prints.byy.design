@@ -7,7 +7,8 @@
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
+  "id": "https://prints.byy.design/",
+  "start_url": "https://prints.byy.design/",
   "background_color": "#000000",
   "theme_color": "#ffffff",
   "icons": [
