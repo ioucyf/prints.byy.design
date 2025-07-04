@@ -92,6 +92,10 @@
     display: none !important;
   }
 
+  #webapp-version {
+    display: none !important;
+  }
+
   small.print:not(.ios) {
     display: block !important;
     text-align: left;
