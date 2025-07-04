@@ -7,13 +7,24 @@ const outputDir = path.resolve('public/assets'); // or src/assets if you prefer
 
 const config = {
   path: '/assets/',
-  dir: './src',
+  display: 'standalone',
+  display_override: ["fullscreen", "minimal-ui"],
+  orientation: 'portrait',
+  scope: '/',
+  start_url: '/',
+  id: 'https://prints.byy.design/',
   appName: 'Prints By Y',
   appShortName: 'Prints',
   appDescription: 'A micro print studio.',
   developerName: 'byy.design',
   background: '#000000',
   theme_color: '#ffffff',
+  protocol_handlers: [
+    {
+      protocol: 'web+prints',
+      url: 'https://prints.byy.design/?%s'
+    }
+  ],
   icons: {
     favicons: true,
     android: true,
