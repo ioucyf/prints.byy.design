@@ -79,8 +79,12 @@
   }
 
   footer {
+    border: 0 none !important;
     /* padding: 0 !important; */
     /* margin: 0 !important; */
+    & small#webapp-version {
+      display: none !important;
+    }
   }
 
   .button-group,
