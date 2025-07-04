@@ -1,0 +1,62 @@
+import { defineConfig } from 'vite';
+import autoprefixer from 'autoprefixer';
+import postcssImport from 'postcss-import';
+import path from 'path';
+import fs from 'fs';
+import { execSync } from 'child_process';
+
+
+export default defineConfig({
+  root: 'src',
+  publicDir: 'assets',
+  css: {
+    postcss: {
+      plugins: [postcssImport(), autoprefixer()],
+    },
+  },
+  build: {
+    outDir: path.resolve(__dirname, 'dist'),
+    emptyOutDir: true,
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: path.resolve(__dirname, 'src/index.html'),
+    },
+    minify: 'esbuild',
+    target: 'esnext',
+  },
+  server: {
+    port: 20284,
+  },
+  plugins: [
+    {
+      name: 'inject-sha-and-assets',
+      closeBundle() {
+        const sha = execSync('git rev-parse --short HEAD').toString().trim();
+        const distDir = path.resolve(__dirname, 'dist');
+        const swTemplatePath = path.resolve(__dirname, 'src/service-worker.js');
+        const swOutputPath = path.resolve(distDir, 'service-worker.js');
+
+        // Collect all asset paths
+        const assetFiles = [];
+        function walk(dir) {
+          for (const file of fs.readdirSync(dir)) {
+            const full = path.join(dir, file);
+            if (fs.statSync(full).isDirectory()) walk(full);
+            else if (file !== 'service-worker.js') {
+              assetFiles.push(full.replace(distDir, '').replace(/\\/g, '/'));
+            }
+          }
+        }
+        walk(distDir);
+
+        // Inject
+        let swContent = fs.readFileSync(swTemplatePath, 'utf8');
+        swContent = swContent
+          .replace(/__BUILD_SHA__/g, sha)
+          .replace(/__ASSETS__/g, JSON.stringify(assetFiles, null, 2));
+        fs.writeFileSync(swOutputPath, swContent);
+        console.log(`[vite] ✅ Injected SHA (${sha}) and assets into service-worker.js`);
+      }
+    }
+  ]
+});

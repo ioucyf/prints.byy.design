@@ -1,0 +1,18 @@
+{
+  "name": "prints.byy.design",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-font-grabber": "^3.1.0",
+    "postcss-import": "^16.1.1",
+    "vite": "^7.0.0"
+  }
+}
