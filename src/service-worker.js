@@ -3,7 +3,8 @@ const ASSETS = __ASSETS__;
 const OWNER = 'ioucyf'; // GitHub username or org
 const REPO = 'prints.byy.design';     // Your repo name
 const BRANCH = 'main';
-
+// this is a test comment to check
+// if the service worker is being updated correctly
 
 
 async function getCurrentCacheName() {
