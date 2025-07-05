@@ -8,6 +8,7 @@ import { execSync } from 'child_process';
 
 export default defineConfig({
   root: 'src',
+
   publicDir: '../public',
   css: {
     postcss: {
@@ -17,12 +18,19 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
-    assetsDir: 'assets',
+    assetsDir: 'lib',
+
     rollupOptions: {
       input: path.resolve(__dirname, 'src/index.html'),
     },
     minify: 'esbuild',
-    target: 'esnext',
+    target: 'baseline-widely-available',
+    // lib: {
+    //   entry: path.resolve(__dirname, 'src/index.js'),
+    //   name: 'PrintsByyDesign',
+    //   formats: ['es'],
+    //   fileName: (format) => `prints-byy-design.${format}.js`,
+    // }
   },
   server: {
     port: 20284,
